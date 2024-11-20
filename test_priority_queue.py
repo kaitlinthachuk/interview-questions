@@ -7,6 +7,7 @@ HARMONY_COMMAND = "HarmonyPremium.exe -r file.xstage"
 MAYA_COMMAND = "Maya.exe -noAutoloadPlugins -file file.ma"
 NUKE_COMMAND = "Nuke14.0.exe -F 1-100 -x file.nk"
 
+
 @pytest.mark.parametrize("queue", [PriorityQueue(), HeapPriorityQueue()])
 def test_different_priorities(queue):
     queue.push({"priority": 10, "command": PHOTOSHOP_COMMAND})
@@ -29,7 +30,8 @@ def test_different_priorities(queue):
     fourth_element = queue.pop()
     assert fourth_element["priority"] == 10
     assert fourth_element["command"] == PHOTOSHOP_COMMAND
-        
+
+
 @pytest.mark.parametrize("queue", [PriorityQueue(), HeapPriorityQueue()])
 def test_all_same_priority(queue):
     queue.push({"priority": 7, "command": HARMONY_COMMAND})
@@ -39,31 +41,36 @@ def test_all_same_priority(queue):
 
     command_order = [HARMONY_COMMAND, PHOTOSHOP_COMMAND, MAYA_COMMAND, NUKE_COMMAND]
     command_index = 0
-    while(not queue.isEmpty()):
+    while not queue.isEmpty():
         element = queue.pop()
         assert element["priority"] == 7
         assert element["command"] == command_order[command_index]
         command_index += 1
+
 
 @pytest.mark.parametrize("queue", [PriorityQueue(), HeapPriorityQueue()])
 def test_out_of_bounds_lower_priority(queue):
     with pytest.raises(ValueError):
         queue.push({"priority": -1, "command": NUKE_COMMAND})
 
+
 @pytest.mark.parametrize("queue", [PriorityQueue(), HeapPriorityQueue()])
 def test_out_of_bounds_upper_priority(queue):
     with pytest.raises(ValueError):
         queue.push({"priority": 12, "command": MAYA_COMMAND})
+
 
 @pytest.mark.parametrize("queue", [PriorityQueue(), HeapPriorityQueue()])
 def test_empty_queue(queue):
     element = queue.pop()
     assert element is None
 
+
 @pytest.mark.parametrize("queue", [PriorityQueue(), HeapPriorityQueue()])
 def test_missing_priority(queue):
     with pytest.raises(KeyError):
         queue.push({"command": PHOTOSHOP_COMMAND})
+
 
 @pytest.mark.parametrize("queue", [PriorityQueue(), HeapPriorityQueue()])
 def test_missing_command(queue):

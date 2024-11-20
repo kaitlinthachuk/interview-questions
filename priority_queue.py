@@ -1,15 +1,17 @@
 class PriorityQueue(object):
     def __init__(self):
         self._queue = []
-    
-    def push(self, item: dict):
+
+    def push(self, item):
         if "priority" not in item:
             raise KeyError("Dict item is missing priority key")
         if "command" not in item:
             raise KeyError("Dict item is missing command key")
 
         if item["priority"] < 0 or item["priority"] > 10:
-            raise ValueError("Priority out of bounds, priority value must be between [0, 10]")
+            raise ValueError(
+                "Priority out of bounds, priority value must be between [0, 10]"
+            )
 
         self._queue.append(item)
 
